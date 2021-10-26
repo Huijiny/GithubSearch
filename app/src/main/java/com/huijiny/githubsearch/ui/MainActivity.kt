@@ -3,7 +3,7 @@ package com.huijiny.githubsearch.ui
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.huijiny.githubsearch.R
@@ -18,6 +18,7 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.schedulers.Schedulers
+import retrofit2.HttpException
 import java.util.concurrent.TimeUnit
 
 class MainActivity: BindingActivity<ActivityMainBinding> (
@@ -32,35 +33,46 @@ class MainActivity: BindingActivity<ActivityMainBinding> (
         binding.recycler.adapter = adapter
         binding.recycler.layoutManager = LinearLayoutManager(this)
         onSetUpViews()
+        setTextWatcher()
     }
 
     private fun onSetUpViews() {
-        viewModel.repositories
+        viewModel.error
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({
-                adapter.submitList(it)
-                Log.d("adpater", it.toString())
-            }, {
-                Log.d("adpater", it.message.toString())
-            })
+            .subscribe {
+                if (it is HttpException) {
+                    when (it.code()) {
+                        304 -> toastError(getString(R.string.not_modified))
+                        422 -> toastError(getString(R.string.unprocessable_entity))
+                        503 -> toastError(getString(R.string.service_unavailable))
+                    }
+                } else {
+                    toastError(getString(R.string.general_error))
+                }
+            }
             .addTo(compositeDisposable)
 
+        viewModel.repositories
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe{
+                adapter.submitList(it)
+            }
+            .addTo(compositeDisposable)
+
+    }
+
+    private fun setTextWatcher() {
         val observableTextQuery = Observable.create(
             ObservableOnSubscribe { emitter: ObservableEmitter<String>? ->
                 binding.searchBar.addTextChangedListener(object : TextWatcher {
-                    override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-
-                    }
+                    override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
 
                     override fun onTextChanged(s: CharSequence?, p1: Int, p2: Int, p3: Int) {
                         emitter?.onNext(s.toString())
                     }
 
-                    override fun afterTextChanged(p0: Editable?) {
-                    }
-
+                    override fun afterTextChanged(p0: Editable?) {}
                 })
-
             })
             .debounce (500, TimeUnit.MILLISECONDS)
             .subscribeOn(Schedulers.io())
@@ -71,16 +83,15 @@ class MainActivity: BindingActivity<ActivityMainBinding> (
                     viewModel.searchRepository(query)
                 }
 
-                override fun onSubscribe(d: Disposable) {
-                }
+                override fun onSubscribe(d: Disposable) {}
 
-                override fun onError(e: Throwable) {
-                }
+                override fun onError(e: Throwable) {}
 
-                override fun onComplete() {
-                }
-
+                override fun onComplete() {}
             })
     }
+
+    private fun toastError(message: String) =
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
 
 }

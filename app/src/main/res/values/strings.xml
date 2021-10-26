@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">GithubSearch</string>
+    <string name="unprocessable_entity">Status: 422 Unprocessable Entity</string>
+    <string name="not_modified">Status: 304 Not Modified</string>
+    <string name="service_unavailable">Status: 503 Service Unavailable</string>
+    <string name="general_error">Error가 발생했습니다.</string>
 </resources>

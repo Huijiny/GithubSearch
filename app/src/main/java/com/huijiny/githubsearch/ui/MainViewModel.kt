@@ -9,6 +9,7 @@ import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.BehaviorSubject
+import retrofit2.HttpException
 
 class MainViewModel: BaseViewModel() {
     private val repository by lazy {
@@ -19,6 +20,10 @@ class MainViewModel: BaseViewModel() {
         BehaviorSubject.create()
     val repositories: Observable<List<Repository>> = _repositories
 
+    private val _error: BehaviorSubject<Throwable> =
+        BehaviorSubject.create()
+    val error: Observable<Throwable> = _error
+
     fun searchRepository(query: String) {
         repository.searchRepository(query)
             .subscribeOn(Schedulers.io())
@@ -26,7 +31,7 @@ class MainViewModel: BaseViewModel() {
             .subscribe({
                 _repositories.onNext(it.repositories)
             }, {
-                Log.d("error", it.message.toString())
+                _error.onNext(it)
             })
             .addToDisposable()
     }
