@@ -1,4 +1,4 @@
-package com.example.github.base
+package com.huijiny.githubsearch.base
 
 import android.os.Bundle
 import androidx.annotation.LayoutRes
