@@ -23,11 +23,11 @@ object GithubRetrofit {
     fun <T> create(
         service: Class<T>
     ): T = Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .client(provideOkHttpClient())
-            .addConverterFactory(GsonConverterFactory.create())
-            .addCallAdapterFactory(RxJava2CallAdapterFactory.createWithScheduler(Schedulers.io()))
-            .build()
-            .create(service)
+        .baseUrl(BASE_URL)
+        .client(provideOkHttpClient())
+        .addConverterFactory(GsonConverterFactory.create())
+        .addCallAdapterFactory(RxJava2CallAdapterFactory.createWithScheduler(Schedulers.io()))
+        .build()
+        .create(service)
 
 }

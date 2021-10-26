@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.huijiny.githubsearch.data.model.Repository
 import com.huijiny.githubsearch.databinding.ItemRepositoryBinding
 
-class MainAdapter:
+class MainAdapter :
     ListAdapter<Repository, MainViewHolder>(DiffUtilCallback) {
     object DiffUtilCallback : DiffUtil.ItemCallback<Repository>() {
         override fun areItemsTheSame(oldItem: Repository, newItem: Repository) = oldItem == newItem

@@ -21,19 +21,25 @@ import io.reactivex.schedulers.Schedulers
 import retrofit2.HttpException
 import java.util.concurrent.TimeUnit
 
-class MainActivity: BindingActivity<ActivityMainBinding> (
+class MainActivity : BindingActivity<ActivityMainBinding>(
     R.layout.activity_main
 ) {
     private val viewModel by viewModels<MainViewModel>()
-    private val adapter = MainAdapter()
+    private val mainAdapter = MainAdapter()
     private val compositeDisposable = CompositeDisposable()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding.recycler.adapter = adapter
-        binding.recycler.layoutManager = LinearLayoutManager(this)
+        initRecycler()
         onSetUpViews()
         setTextWatcher()
+    }
+
+    private fun initRecycler() {
+        binding.recycler.run {
+            adapter = mainAdapter
+            layoutManager = LinearLayoutManager(context)
+        }
     }
 
     private fun onSetUpViews() {
@@ -54,8 +60,8 @@ class MainActivity: BindingActivity<ActivityMainBinding> (
 
         viewModel.repositories
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe{
-                adapter.submitList(it)
+            .subscribe {
+                mainAdapter.submitList(it)
             }
             .addTo(compositeDisposable)
 
@@ -74,7 +80,7 @@ class MainActivity: BindingActivity<ActivityMainBinding> (
                     override fun afterTextChanged(p0: Editable?) {}
                 })
             })
-            .debounce (500, TimeUnit.MILLISECONDS)
+            .debounce(500, TimeUnit.MILLISECONDS)
             .subscribeOn(Schedulers.io())
 
         observableTextQuery
