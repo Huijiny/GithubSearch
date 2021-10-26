@@ -1,4 +1,4 @@
-package com.huijiny.githubsearch.data
+package com.huijiny.githubsearch.data.model
 
 data class Owner(
     val login: String,

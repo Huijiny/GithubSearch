@@ -1,4 +1,4 @@
-package com.huijiny.githubsearch.data.response
+package com.huijiny.githubsearch.data.model.response
 
 import com.google.gson.annotations.SerializedName
 
