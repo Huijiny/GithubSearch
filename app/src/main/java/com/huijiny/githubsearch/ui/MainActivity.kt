@@ -12,10 +12,8 @@ import io.reactivex.Observable
 import io.reactivex.ObservableEmitter
 import io.reactivex.ObservableOnSubscribe
 import io.reactivex.Observer
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
-import io.reactivex.rxkotlin.addTo
 import io.reactivex.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
 
@@ -28,31 +26,24 @@ class MainActivity : BindingActivity<ActivityMainBinding>(
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        initRecycler()
+        initView()
         onSetUpViews()
+    }
+
+    private fun initView() {
+        binding.lifecycleOwner = this
+        binding.viewmodel = viewModel
+        binding.recycler.adapter = mainAdapter
+
         setTextWatcher()
     }
 
-    private fun initRecycler() {
-        binding.recycler.adapter = mainAdapter
-    }
-
     private fun onSetUpViews() {
-        viewModel.error
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe {
-                if (it != null) {
-                    showToast(getString(it))
-                }
+        viewModel.error.observe(this) {
+            if (it != null) {
+                showToast(getString(it))
             }
-            .addTo(compositeDisposable)
-
-        viewModel.repositories
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe {
-                mainAdapter.submitList(it)
-            }
-            .addTo(compositeDisposable)
+        }
     }
 
     private fun setTextWatcher() {
