@@ -1,7 +1,6 @@
-package com.example.github.network
+package com.huijiny.githubsearch.network
 
-import com.example.github.data.service.SearchService
-import retrofit2.Retrofit
+import com.huijiny.githubsearch.data.service.SearchService
 
 object GithubInjection {
     fun provideSearchService(): SearchService =
