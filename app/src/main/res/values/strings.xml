@@ -4,4 +4,7 @@
     <string name="not_modified">Status: 304 Not Modified</string>
     <string name="service_unavailable">Status: 503 Service Unavailable</string>
     <string name="general_error">Error가 발생했습니다.</string>
+    <string name="no_description">레포지토리에 대한 설명이 없습니다.</string>
+    <string name="forks">%d forks</string>
+    <string name="stars">%d stars</string>
 </resources>

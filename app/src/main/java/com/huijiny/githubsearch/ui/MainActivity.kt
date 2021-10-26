@@ -64,7 +64,6 @@ class MainActivity : BindingActivity<ActivityMainBinding>(
                 mainAdapter.submitList(it)
             }
             .addTo(compositeDisposable)
-
     }
 
     private fun setTextWatcher() {
