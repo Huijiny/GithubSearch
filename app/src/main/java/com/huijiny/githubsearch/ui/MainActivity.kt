@@ -5,7 +5,6 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.widget.Toast
 import androidx.activity.viewModels
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.huijiny.githubsearch.R
 import com.huijiny.githubsearch.base.BindingActivity
 import com.huijiny.githubsearch.databinding.ActivityMainBinding
@@ -18,7 +17,6 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.schedulers.Schedulers
-import retrofit2.HttpException
 import java.util.concurrent.TimeUnit
 
 class MainActivity : BindingActivity<ActivityMainBinding>(
@@ -36,24 +34,15 @@ class MainActivity : BindingActivity<ActivityMainBinding>(
     }
 
     private fun initRecycler() {
-        binding.recycler.run {
-            adapter = mainAdapter
-            layoutManager = LinearLayoutManager(context)
-        }
+        binding.recycler.adapter = mainAdapter
     }
 
     private fun onSetUpViews() {
         viewModel.error
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe {
-                if (it is HttpException) {
-                    when (it.code()) {
-                        304 -> toastError(getString(R.string.not_modified))
-                        422 -> toastError(getString(R.string.unprocessable_entity))
-                        503 -> toastError(getString(R.string.service_unavailable))
-                    }
-                } else {
-                    toastError(getString(R.string.general_error))
+                if (it != null) {
+                    showToast(getString(it))
                 }
             }
             .addTo(compositeDisposable)
@@ -96,7 +85,12 @@ class MainActivity : BindingActivity<ActivityMainBinding>(
             })
     }
 
-    private fun toastError(message: String) =
+    private fun showToast(message: String) =
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+
+    override fun onDestroy() {
+        super.onDestroy()
+        compositeDisposable.clear()
+    }
 
 }
