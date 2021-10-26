@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
         <variable
             name="repository"
             type="com.huijiny.githubsearch.data.model.Repository" />
@@ -33,18 +32,17 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
             android:text="@{repository.description == null ? @string/no_description : repository.description}"
-            app:layout_constraintStart_toStartOf="@id/name"
-            app:layout_constraintTop_toBottomOf="@id/name" />
+            app:layout_constraintStart_toStartOf="@id/forks"
+            app:layout_constraintTop_toBottomOf="@id/forks" />
 
         <TextView
             android:id="@+id/forks"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingHorizontal="10dp"
+            android:layout_marginTop="5dp"
             android:text="@{@string/forks(repository.forks)}"
-            app:layout_constraintBottom_toBottomOf="@+id/name"
-            app:layout_constraintStart_toEndOf="@+id/name"
-            app:layout_constraintTop_toTopOf="@+id/name"
+            app:layout_constraintStart_toStartOf="@+id/name"
+            app:layout_constraintTop_toBottomOf="@+id/name"
             tools:text="30" />
 
         <TextView
