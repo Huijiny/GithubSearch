@@ -1,12 +1,12 @@
-package com.example.github.ui
+package com.huijiny.githubsearch.ui
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.github.data.model.Repository
-import com.example.github.databinding.ItemRepositoryBinding
+import com.huijiny.githubsearch.data.model.Repository
+import com.huijiny.githubsearch.databinding.ItemRepositoryBinding
 
 class MainAdapter:
     ListAdapter<Repository, MainViewHolder>(DiffUtilCallback) {
