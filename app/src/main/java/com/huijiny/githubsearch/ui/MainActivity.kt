@@ -12,7 +12,6 @@ import io.reactivex.Observable
 import io.reactivex.ObservableEmitter
 import io.reactivex.ObservableOnSubscribe
 import io.reactivex.Observer
-import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
@@ -22,7 +21,6 @@ class MainActivity : BindingActivity<ActivityMainBinding>(
 ) {
     private val viewModel by viewModels<MainViewModel>()
     private val mainAdapter = MainAdapter()
-    private val compositeDisposable = CompositeDisposable()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -81,7 +79,6 @@ class MainActivity : BindingActivity<ActivityMainBinding>(
 
     override fun onDestroy() {
         super.onDestroy()
-        compositeDisposable.clear()
     }
 
 }
