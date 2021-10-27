@@ -77,8 +77,4 @@ class MainActivity : BindingActivity<ActivityMainBinding>(
     private fun showToast(message: String) =
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
 
-    override fun onDestroy() {
-        super.onDestroy()
-    }
-
 }
